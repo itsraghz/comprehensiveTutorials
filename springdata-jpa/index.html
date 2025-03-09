@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Data JPA Tutorial</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <!-- Custom CSS for blue theme -->
+    <link rel="stylesheet" href="./static/css/custom.css">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+        <div class="container">
+            <a class="navbar-brand" href="#">Spring Data JPA Tutorial</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#introduction" data-bs-toggle="tab">Introduction</a>
+                    </li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="precursoryDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Precursory
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="precursoryDropdown">
+                            <li><a class="dropdown-item" href="#jdbc" data-bs-toggle="tab">JDBC</a></li>
+                            <li><a class="dropdown-item" href="#jpa-hibernate" data-bs-toggle="tab">JPA/Hibernate</a></li>
+                            <li><a class="dropdown-item" href="#spring-core" data-bs-toggle="tab">Spring Core/DI</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#fundamentals" data-bs-toggle="tab">Spring Data JPA Fundamentals</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#api" data-bs-toggle="tab">API Classes & Methods</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#sms" data-bs-toggle="tab">Student Management System Example</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#exercises" data-bs-toggle="tab">Exercises</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content with Tab Navigation -->
+    <div class="container">
+        <div class="tab-content">
+            <!-- Introduction Tab -->
+            <div class="tab-pane fade show active" id="introduction">
+                <h2>Introduction to Spring Data JPA</h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <p>Spring Data JPA is part of the larger Spring Data family that makes it easy to implement JPA-based repositories. It provides a layer of abstraction that simplifies data access by reducing the amount of boilerplate code needed.</p>
+                        <p>Key benefits of Spring Data JPA include:</p>
+                        <ul>
+                            <li>Significantly reduces boilerplate code for data access layers</li>
+                            <li>Provides convenient abstractions for paging and sorting</li>
+                            <li>Easy implementation of custom query methods</li>
+                            <li>Integration with Spring's transaction management</li>
+                            <li>Support for auditing and dynamic queries</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card bg-primary text-white">
+                            <div class="card-header">Getting Started</div>
+                            <div class="card-body bg-light text-dark">
+                                <p>Navigate through the tabs to learn about Spring Data JPA from basics to advanced concepts.</p>
+                                <a href="#fundamentals" class="btn btn-primary" data-bs-toggle="tab">Start Learning</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- JDBC Tab -->
+            <div class="tab-pane fade" id="jdbc">
+                <h2>JDBC (Java Database Connectivity)</h2>
+                <p>Before JPA and Spring Data, developers used JDBC to interact with databases. JDBC is a Java API that allows Java applications to interact with relational database systems.</p>
+                <div class="alert alert-info">
+                    <h5>Key JDBC Concepts</h5>
+                    <ul>
+                        <li>Direct SQL execution through Connection, Statement, and ResultSet objects</li>
+                        <li>Manual transaction management</li>
+                        <li>Explicit resource handling (connections, statements)</li>
+                        <li>Verbose error handling with try-catch blocks</li>
+                    </ul>
+                </div>
+                <h5>Sample JDBC Code:</h5>
+                <pre class="bg-light p-3"><code>Connection conn = null;
+Statement stmt = null;
+try {
+    conn = DriverManager.getConnection(DB_URL, USER, PASS);
+    stmt = conn.createStatement();
+    String sql = "SELECT id, name, age FROM students";
+    ResultSet rs = stmt.executeQuery(sql);
+    
+    while(rs.next()) {
+        int id = rs.getInt("id");
+        String name = rs.getString("name");
+        int age = rs.getInt("age");
+        // Process data
+    }
+    rs.close();
+} catch(SQLException se) {
+    // Handle errors
+} finally {
+    // Close resources
+    try {
+        if(stmt!=null) stmt.close();
+    } catch(SQLException se) {}
+    try {
+        if(conn!=null) conn.close();
+    } catch(SQLException se) {}
+}
+</code></pre>
+            </div>
+
+            <!-- JPA/Hibernate Tab -->
+            <div class="tab-pane fade" id="jpa-hibernate">
+                <h2>JPA and Hibernate</h2>
+                <p>JPA (Java Persistence API) is a specification for ORM (Object-Relational Mapping) in Java. Hibernate is one of the most popular implementations of JPA.</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">JPA Key Features</div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Standard ORM specification for Java</li>
+                                    <li>Entity management and mapping</li>
+                                    <li>JPQL (Java Persistence Query Language)</li>
+                                    <li>Persistence context and caching</li>
+                                    <li>Criteria API for type-safe queries</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">Hibernate Benefits</div>
+                            <div class="card-body">
+                                <ul>
+                                    <li>Mature, feature-rich JPA implementation</li>
+                                    <li>Advanced caching capabilities</li>
+                                    <li>Lazy loading and eager fetching</li>
+                                    <li>Hibernate Query Language (HQL)</li>
+                                    <li>Session management</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <h5 class="mt-4">Sample JPA Entity:</h5>
+                <pre class="bg-light p-3"><code>@Entity
+@Table(name = "students")
+public class Student {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+    
+    @Column(name = "last_name")
+    private String lastName;
+    
+    @Column(name = "email", unique = true)
+    private String email;
+    
+    // Getters and setters
+}
+</code></pre>
+            </div>
+
+            <!-- Spring Core/DI Tab -->
+            <div class="tab-pane fade" id="spring-core">
+                <h2>Spring Core and Dependency Injection</h2>
+                <p>Spring Core provides the fundamental functionality of the Spring Framework, including dependency injection and inversion of control.</p>
+                
+                <div class="alert alert-primary">
+                    <h5>Key Spring Core Concepts:</h5>
+                    <ul>
+                        <li><b>Inversion of Control (IoC):</b> The Spring container is responsible for instantiating, configuring, and assembling objects (beans).</li>
+                        <li><b>Dependency Injection (DI):</b> Objects are given their dependencies at creation time by the framework rather than looking up dependencies themselves.</li>
+                        <li><b>Bean lifecycle management:</b> Spring manages the complete lifecycle of beans from instantiation to destruction.</li>
+                    </ul>
+                </div>
+                
+                <h5>Types of Dependency Injection:</h5>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header">Constructor Injection</div>
+                            <div class="card-body">
+                                <pre><code>@Service
+public class StudentService {
+    private final StudentRepository repository;
+    
+    @Autowired
+    public StudentService(StudentRepository repository) {
+        this.repository = repository;
+    }
+}
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-header">Setter Injection</div>
+                            <div class="card-body">
+                                <pre><code>@Service
+public class StudentService {
+    private StudentRepository repository;
+    
+    @Autowired
+    public void setRepository(StudentRepository repository) {
+        this.repository = repository;
+    }
+}
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Spring Data JPA Fundamentals Tab -->
+            <div class="tab-pane fade" id="fundamentals">
+                <h2>Spring Data JPA Fundamentals</h2>
+                <p>Spring Data JPA simplifies the implementation of JPA-based repositories by providing a higher level of abstraction.</p>
+                
+                <div class="accordion" id="fundamentalsAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                Core Concepts
+                            </button>
+                        </h2>
+                        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#fundamentalsAccordion">
+                            <div class="accordion-body">
+                                <ul>
+                                    <li><b>Repository Interfaces:</b> Define an interface extending Spring Data repositories to get basic CRUD operations</li>
+                                    <li><b>Query Methods:</b> Define methods following naming conventions to automatically generate queries</li>
+                                    <li><b>Custom Queries:</b> Use @Query annotation for more complex queries</li>
+                                    <li><b>Paging and Sorting:</b> Built-in support for pagination and sorting</li>
+                                    <li><b>Auditing:</b> Track who created or modified entities and when</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                Repository Hierarchy
+                            </button>
+                        </h2>
+                        <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#fundamentalsAccordion">
+                            <div class="accordion-body">
+                                <p>Spring Data JPA provides a hierarchy of repository interfaces:</p>
+                                <ul>
+                                    <li><b>Repository:</b> Marker interface with no methods</li>
+                                    <li><b>CrudRepository:</b> Basic CRUD operations</li>
+                                    <li><b>PagingAndSortingRepository:</b> Adds methods for pagination and sorting</li>
+                                    <li><b>JpaRepository:</b> JPA-specific methods including flushing the persistence context and batch operations</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                <i class="bi bi-code-square me-2"></i> Query Methods
+                            </button>
+                        </h2>
+                        <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#fundamentalsAccordion">
+                            <div class="accordion-body">
+                                <p>Spring Data JPA allows you to define query methods by simply declaring method signatures in repository interfaces:</p>
+                                <pre class="bg-light p-3"><code>public interface StudentRepository extends JpaRepository&lt;Student, Long&gt; {
+    List&lt;Student&gt; findByLastName(String lastName);
+    List&lt;Student&gt; findByFirstNameAndEmail(String firstName, String email);
+    Student findTopByOrderByGpaDesc();
+    List&lt;Student&gt; findByAgeBetween(int minAge, int maxAge);
+    List&lt;Student&gt; findByEnrollmentDateAfter(Date date);
+}</code></pre>
+                                <p>These method names are automatically parsed and converted to SQL queries by Spring Data JPA.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                <i class="bi bi-gear me-2"></i> Configuration
+                            </button>
+                        </h2>
+                        <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#fundamentalsAccordion">
+                            <div class="accordion-body">
+                                <p>Configuring Spring Data JPA involves several steps:</p>
+                                <ul>
+                                    <li><b>Dependencies:</b> Add Spring Data JPA and a database driver to your project</li>
+                                    <li><b>DataSource Configuration:</b> Configure the database connection</li>
+                                    <li><b>EntityManager Configuration:</b> Set up the JPA EntityManagerFactory</li>
+                                    <li><b>Repository Configuration:</b> Enable the repository interfaces</li>
+                                </ul>
+                                <p>In Spring Boot, much of this is auto-configured when you add the right starter dependencies:</p>
+                                <pre class="bg-light p-3"><code>&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;
+&lt;/dependency&gt;
+&lt;dependency&gt;
+    &lt;groupId&gt;com.h2database&lt;/groupId&gt;
+    &lt;artifactId&gt;h2&lt;/artifactId&gt;
+    &lt;scope&gt;runtime&lt;/scope&gt;
+&lt;/dependency&gt;</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- API Classes & Methods Tab -->
+            <div class="tab-pane fade" id="api">
+                <h2>Spring Data JPA API Classes & Methods</h2>
+                <p>Spring Data JPA provides a rich set of interfaces and classes to simplify database operations.</p>
+                
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">Core Repository Interfaces</div>
+                            <div class="card-body">
+                                <ul class="list-group list-group-flush">
+                                    <li class="list-group-item">
+                                        <h5><i class="bi bi-diagram-3"></i> Repository</h5>
+                                        <p>Marker interface that captures the domain type and ID type. Primarily used for type information.</p>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h5><i class="bi bi-database"></i> CrudRepository</h5>
+                                        <p>Provides CRUD functionality:</p>
+                                        <ul>
+                                            <li><code>save(entity)</code> - Save an entity</li>
+                                            <li><code>findById(id)</code> - Find by primary key</li>
+                                            <li><code>existsById(id)</code> - Check if entity exists</li>
+                                            <li><code>findAll()</code> - Get all entities</li>
+                                            <li><code>count()</code> - Count entities</li>
+                                            <li><code>delete(entity)</code> - Delete an entity</li>
+                                        </ul>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h5><i class="bi bi-sort-numeric-down"></i> PagingAndSortingRepository</h5>
+                                        <p>Adds pagination and sorting functionality:</p>
+                                        <ul>
+                                            <li><code>findAll(Pageable pageable)</code> - Get entities with pagination</li>
+                                            <li><code>findAll(Sort sort)</code> - Get sorted entities</li>
+                                        </ul>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <h5><i class="bi bi-journals"></i> JpaRepository</h5>
+                                        <p>Adds JPA-specific methods:</p>
+                                        <ul>
+                                            <li><code>flush()</code> - Flush pending changes</li>
+                                            <li><code>saveAndFlush(entity)</code> - Save and flush</li>
+                                            <li><code>deleteInBatch(entities)</code> - Batch delete</li>
+                                            <li><code>deleteAllInBatch()</code> - Delete all in one query</li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card mb-3">
+                            <div class="card-header bg-primary text-white">Query Methods and Annotations</div>
+                            <div class="card-body">
+                                <h5><i class="bi bi-search"></i> Query Creation</h5>
+                                <p>Method names are parsed to create queries automatically:</p>
+                                <pre class="bg-light p-3"><code>// Finds all students with the given last name
+findByLastName(String lastName)
+
+// Finds students with last name like pattern
+findByLastNameLike(String pattern)
+
+// Greater than or equal to
+findByAgeGreaterThanEqual(Integer age)
+
+// Limit results
+findTop10ByOrderByGpaDesc()</code></pre>
+                                
+                                <h5 class="mt-3"><i class="bi bi-code-square"></i> @Query Annotation</h5>
+                                <p>For complex queries, use the @Query annotation:</p>
+                                <pre class="bg-light p-3"><code>@Query("SELECT s FROM Student s WHERE s.gpa > ?1")
+List<Student> findStudentsWithGpaGreaterThan(Double gpa);
+
+@Query("SELECT s FROM Student s WHERE s.firstName = :name OR s.lastName = :name")
+List<Student> findByFirstOrLastName(@Param("name") String name);</code></pre>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">Other Important APIs</div>
+                            <div class="card-body">
+                                <ul>
+                                    <li><b>Sort:</b> For specifying sort criteria</li>
+                                    <li><b>Pageable/PageRequest:</b> For pagination</li>
+                                    <li><b>Specification:</b> For dynamic queries (JPA Criteria API)</li>
+                                    <li><b>Example/ExampleMatcher:</b> For query-by-example</li>
+                                </ul>
+                                <pre class="bg-light p-3"><code>// Sorting
+Sort sort = Sort.by(Sort.Direction.DESC, "lastName");
+
+// Pagination
+Pageable pageable = PageRequest.of(0, 20, sort);
+Page<Student> studentPage = studentRepository.findAll(pageable);</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Student Management System Example Tab -->
+            <div class="tab-pane fade" id="sms">
+                <h2>Student Management System Example</h2>
+                <p>Let's walk through a complete example of a Student Management System using Spring Data JPA.</p>
+                
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-info-circle"></i> Project Structure</h5>
+                    <p>The sample application follows a standard Spring Boot project structure:</p>
+                    <ul>
+                        <li><code>model</code> - Entity classes</li>
+                        <li><code>repository</code> - Spring Data JPA repositories</li>
+                        <li><code>service</code> - Service layer with business logic</li>
+                        <li><code>controller</code> - REST controllers</li>
+                    </ul>
+                </div>
+                
+                <div class="accordion" id="smsAccordion">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSmsOne">
+                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSmsOne" aria-expanded="true" aria-controls="collapseSmsOne">
+                                <i class="bi bi-database"></i> Student Entity
+                            </button>
+                        </h2>
+                        <div id="collapseSmsOne" class="accordion-collapse collapse show" aria-labelledby="headingSmsOne" data-bs-parent="#smsAccordion">
+                            <div class="accordion-body">
+                                <pre class="bg-light p-3"><code>@Entity
+@Table(name = "students")
+public class Student {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+    
+    @Column(name = "first_name", nullable = false)
+    private String firstName;
+    
+    @Column(name = "last_name", nullable = false)
+    private String lastName;
+    
+    @Column(unique = true, nullable = false)
+    private String email;
+    
+    private Integer age;
+    
+    private Double gpa;
+    
+    @Temporal(TemporalType.DATE)
+    private Date enrollmentDate;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "department_id")
+    private Department department;
+    
+    @ManyToMany
+    @JoinTable(
+        name = "student_courses",
+        joinColumns = @JoinColumn(name = "student_id"),
+        inverseJoinColumns = @JoinColumn(name = "course_id")
+    )
+    private Set<Course> courses = new HashSet<>();
+    
+    // Constructors, getters, setters, equals, hashCode, toString
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSmsTwo">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSmsTwo" aria-expanded="false" aria-controls="collapseSmsTwo">
+                                <i class="bi bi-diagram-3"></i> Student Repository
+                            </button>
+                        </h2>
+                        <div id="collapseSmsTwo" class="accordion-collapse collapse" aria-labelledby="headingSmsTwo" data-bs-parent="#smsAccordion">
+                            <div class="accordion-body">
+                                <pre class="bg-light p-3"><code>public interface StudentRepository extends JpaRepository<Student, Long> {
+    
+    // Find by name
+    List<Student> findByFirstName(String firstName);
+    List<Student> findByLastName(String lastName);
+    
+    // Find by email (unique)
+    Optional<Student> findByEmail(String email);
+    
+    // Find by age range
+    List<Student> findByAgeBetween(Integer minAge, Integer maxAge);
+    
+    // Find by GPA with sorting
+    List<Student> findByGpaGreaterThanEqual(Double minGpa, Sort sort);
+    
+    // Find by department
+    List<Student> findByDepartmentName(String departmentName);
+    
+    // Count students in each department
+    @Query("SELECT s.department.name, COUNT(s) FROM Student s GROUP BY s.department.name")
+    List<Object[]> countStudentsByDepartment();
+    
+    // Find top performers
+    @Query("SELECT s FROM Student s ORDER BY s.gpa DESC")
+    List<Student> findTopPerformers(Pageable pageable);
+}</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSmsThree">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSmsThree" aria-expanded="false" aria-controls="collapseSmsThree">
+                                <i class="bi bi-gear"></i> Student Service
+                            </button>
+                        </h2>
+                        <div id="collapseSmsThree" class="accordion-collapse collapse" aria-labelledby="headingSmsThree" data-bs-parent="#smsAccordion">
+                            <div class="accordion-body">
+                                <pre class="bg-light p-3"><code>@Service
+@Transactional
+public class StudentService {
+    
+    private final StudentRepository studentRepository;
+    private final DepartmentRepository departmentRepository;
+    
+    @Autowired
+    public StudentService(StudentRepository studentRepository, 
+                          DepartmentRepository departmentRepository) {
+        this.studentRepository = studentRepository;
+        this.departmentRepository = departmentRepository;
+    }
+    
+    public List<Student> getAllStudents() {
+        return studentRepository.findAll();
+    }
+    
+    public Student getStudentById(Long id) {
+        return studentRepository.findById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("Student not found with id: " + id));
+    }
+    
+    public Student createStudent(Student student) {
+        // Validate email is unique
+        if (studentRepository.findByEmail(student.getEmail()).isPresent()) {
+            throw new DuplicateResourceException("Email already in use: " + student.getEmail());
+        }
+        
+        // Validate department exists if provided
+        if (student.getDepartment() != null && student.getDepartment().getId() != null) {
+            Department department = departmentRepository.findById(student.getDepartment().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
+            student.setDepartment(department);
+        }
+        
+        Student student = getStudentById(id);
+        
+        // Update fields
+        student.setFirstName(studentDetails.getFirstName());
+        student.setLastName(studentDetails.getLastName());
+        student.setAge(studentDetails.getAge());
+        student.setGpa(studentDetails.getGpa());
+        
+        // Validate email if changed
+        if (!student.getEmail().equals(studentDetails.getEmail())) {
+            studentRepository.findByEmail(studentDetails.getEmail())
+                .ifPresent(s -> {
+                    throw new DuplicateResourceException("Email already in use");
+                });
+            student.setEmail(studentDetails.getEmail());
+        }
+        
+        // Update department if changed
+        if (studentDetails.getDepartment() != null 
+            && !studentDetails.getDepartment().equals(student.getDepartment())) {
+            Department department = departmentRepository.findById(studentDetails.getDepartment().getId())
+                .orElseThrow(() -> new ResourceNotFoundException("Department not found"));
+            student.setDepartment(department);
+        }
+        
+        return studentRepository.save(student);
+    }
+    
+    public void deleteStudent(Long id) {
+        Student student = getStudentById(id);
+        studentRepository.delete(student);
+    }
+    
+    public List<Student> findTopPerformers(int count) {
+        return studentRepository.findTopPerformers(PageRequest.of(0, count));
+    }
+}
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="headingSmsFour">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSmsFour" aria-expanded="false" aria-controls="collapseSmsFour">
+                                <i class="bi bi-controller"></i> Student Controller
+                            </button>
+                        </h2>
+                        <div id="collapseSmsFour" class="accordion-collapse collapse" aria-labelledby="headingSmsFour" data-bs-parent="#smsAccordion">
+                            <div class="accordion-body">
+                                <pre class="bg-light p-3"><code>@RestController
+@RequestMapping("/api/students")
+public class StudentController {
+    
+    private final StudentService studentService;
+    
+    @Autowired
+    public StudentController(StudentService studentService) {
+        this.studentService = studentService;
+    }
+    
+    @GetMapping
+    public List<Student> getAllStudents() {
+        return studentService.getAllStudents();
+    }
+    
+    @GetMapping("/{id}")
+    public ResponseEntity<Student> getStudentById(@PathVariable Long id) {
+        Student student = studentService.getStudentById(id);
+        return ResponseEntity.ok(student);
+    }
+    
+    @PostMapping
+    public ResponseEntity<Student> createStudent(@Valid @RequestBody Student student) {
+        Student newStudent = studentService.createStudent(student);
+        return ResponseEntity
+            .created(URI.create("/api/students/" + newStudent.getId()))
+            .body(newStudent);
+    }
+    
+    @PutMapping("/{id}")
+    public ResponseEntity<Student> updateStudent(
+            @PathVariable Long id, 
+            @Valid @RequestBody Student studentDetails) {
+        Student updatedStudent = studentService.updateStudent(id, studentDetails);
+        return ResponseEntity.ok(updatedStudent);
+    }
+    
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteStudent(@PathVariable Long id) {
+        studentService.deleteStudent(id);
+        return ResponseEntity.noContent().build();
+    }
+    
+    @GetMapping("/top-performers")
+    public List<Student> getTopPerformers(@RequestParam(defaultValue = "10") int count) {
+        return studentService.findTopPerformers(count);
+    }
+}
+</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Exercises Tab -->
+            <div class="tab-pane fade" id="exercises">
+                <h2>Spring Data JPA Exercises</h2>
+                <p>Practice your Spring Data JPA skills with these exercises:</p>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="bi bi-check2-square"></i> Exercise 1: Basic CRUD Operations</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Implement a simple Spring Data JPA application that:</p>
+                        <ol>
+                            <li>Creates a Book entity with fields: id, title, author, isbn, publishDate, price</li>
+                            <li>Implements a BookRepository interface extending JpaRepository</li>
+                            <li>Adds CRUD operations through a BookService</li>
+                            <li>Creates a REST controller to expose the CRUD operations</li>
+                        </ol>
+                        <div class="alert alert-info">
+                            <strong>Bonus:</strong> Add validation to ensure ISBN is unique and properly formatted
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card mb-4">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="bi bi-check2-square"></i> Exercise 2: Advanced Queries</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Extend the Book application with the following query methods:</p>
+                        <ol>
+                            <li>Find books by author (case insensitive)</li>
+                            <li>Find books published between two dates</li>
+                            <li>Find books with price less than a specified amount</li>
+                            <li>Find books containing a specific word in the title (using LIKE)</li>
+                            <li>Find the most expensive book</li>
+                        </ol>
+                        <div class="alert alert-info">
+                            <strong>Bonus:</strong> Implement a custom query using @Query with JPQL to find books by author and publish year
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h5><i class="bi bi-check2-square"></i> Exercise 3: Relationships</h5>
+                    </div>
+                    <div class="card-body">
+                        <p>Create a more complex model with relationships:</p>
+                        <ol>
+                            <li>Create a Publisher entity with a @OneToMany relationship to Book</li>
+                            <li>Create a Category entity with a @ManyToMany relationship to Book</li>
+                            <li>Implement repository methods to find books by publisher and category</li>
+                            <li>Add endpoints to the REST controller to query these relationships</li>
+                        </ol>
+                        <div class="alert alert-info">
+                            <strong>Bonus:</strong> Add pagination and sorting capabilities to your repository methods
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JavaScript -->
+    <script src="./static/js/main.js"></script>
+</body>
+</html>
