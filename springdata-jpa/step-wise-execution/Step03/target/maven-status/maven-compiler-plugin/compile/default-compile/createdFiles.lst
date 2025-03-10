@@ -1,0 +1,9 @@
+com/learning/springdatajpa/jdbc/StudentRepository.class
+com/learning/springdatajpa/jdbc/Student.class
+com/learning/springdatajpa/jdbc/H2DatabaseUtil.class
+com/learning/springdatajpa/jdbc/JdbcDatabaseInitializer.class
+com/learning/springdatajpa/jdbc/StudentRepositoryImpl.class
+com/learning/springdatajpa/jdbc/H2DatabaseUtil$TransactionOperation.class
+com/learning/springdatajpa/jdbc/JdbcApplication.class
+com/learning/springdatajpa/jdbc/H2DatabaseUtil$ResultSetMapper.class
+com/learning/springdatajpa/jdbc/JdbcStudentApp.class
